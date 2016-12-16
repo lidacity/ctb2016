@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+ <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
+ <script src="bazaar.js"></script>
+ <style>
+  html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
+ </style>
+</head>
+
+<body>
+ <div id="map" style="width: 100%; height: 100%"></div>
+ <script>
+  var OptionMap = { maxZoom: 18, minZoom: 11, maxBounds: [[53.80, 25.20], [54.00, 25.40]], attribution: ' © <a href="http://www.openstreetmap.org/copyright">Openstreetmap</a> | © <a href="http://ctb2016.lidacity.by/">LidaCity</a>' }
+  var Map = L.map('map').setView([53.90, 25.30], 13);
+  L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', OptionMap).addTo(Map);
+
+  function JsonEachFeature(feature, layer)
+  {
+   feature.layer = layer;
+   layer.bindPopup(feature.properties.popupContent);
+  }
+
+  var smallIcon = new L.Icon({ iconUrl: 'bazaar.png', iconSize: [48, 48], iconAnchor: [24, 48], popupAnchor: [0, -48] });
+
+  function GetMarker(feature, latlng)
+  {
+   return L.marker(latlng, {icon: smallIcon});
+  }
+
+  var OptionBazaar = { onEachFeature: JsonEachFeature, pointToLayer: GetMarker }
+  var ChristmasTreeBazaar = L.geoJson(bazaar, OptionBazaar);
+  ChristmasTreeBazaar.addTo(Map);
+ </script>
+</body>
